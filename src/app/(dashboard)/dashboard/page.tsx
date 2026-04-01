@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { getAuthenticatedProfile } from '@/lib/auth'
 import { getPropertyLimitStatus, canAccessAdvancedDashboard, canAccessPremiumAnalytics } from '@/lib/permissions'
 import { formatCurrency, formatRelativeDate } from '@/lib/utils'
 import {
@@ -80,9 +79,30 @@ function computeMonthlyLeads(leads: { created_at: string }[]) {
 }
 
 export default async function DashboardPage() {
-  const { profile } = await getAuthenticatedProfile()
   const supabase = await createClient()
-  const pkg = profile.package_type
+
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  // Get profile if user exists
+  let pkg = 'pack1'
+  let agency_name: string | null = null
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('package_type, agency_name')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      pkg = profile.package_type || 'pack1'
+      agency_name = profile.agency_name
+    }
+  }
+
   const showAdvanced = canAccessAdvancedDashboard(pkg)
   const showPremium = canAccessPremiumAnalytics(pkg)
 
@@ -223,8 +243,8 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
           <p className="text-slate-400 text-sm mt-1">
-            {profile.agency_name
-              ? `${profile.agency_name} portföy özeti`
+            {agency_name
+              ? `${agency_name} portföy özeti`
               : 'Portföyünüze genel bakış'}
           </p>
         </div>

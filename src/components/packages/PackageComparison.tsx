@@ -51,13 +51,20 @@ export default function PackageComparison({ currentPackage }: PackageComparisonP
             {/* Header */}
             <div className="mb-6">
               <h3 className="text-white font-bold text-lg">{pkg.name}</h3>
-              <div className="mt-3 flex items-end gap-1">
-                <span className="text-3xl font-extrabold text-white">
-                  {formatPackagePrice(pkg.priceMonthly)}
-                </span>
-                <span className="text-slate-400 text-sm mb-1">/ay</span>
+              <div className="mt-3">
+                <div className="flex items-end gap-2 mb-1">
+                  <span className="text-3xl font-extrabold text-white">
+                    {formatPackagePrice(pkg.priceOneTime)}
+                  </span>
+                  <span className="text-slate-400 text-sm">tek seferlik</span>
+                </div>
+                {pkg.maintenanceFee && (
+                  <p className="text-slate-600 text-xs mt-2">
+                    + {formatPackagePrice(pkg.maintenanceFee)}/ay bakım ücreti
+                  </p>
+                )}
               </div>
-              <p className="text-slate-400 text-sm mt-1">
+              <p className="text-slate-400 text-sm mt-3">
                 {pkg.propertyLimit === null
                   ? 'Sınırsız ilan'
                   : `Max ${pkg.propertyLimit} ilan`}

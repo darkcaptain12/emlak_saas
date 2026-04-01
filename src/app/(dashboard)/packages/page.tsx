@@ -1,12 +1,31 @@
-import { getAuthenticatedProfile } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
 import PackageComparison from '@/components/packages/PackageComparison'
 import { Package, MessageCircle } from 'lucide-react'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
 import { PACKAGE_CONFIGS } from '@/lib/config/packages'
 
 export default async function PackagesPage() {
-  const { profile } = await getAuthenticatedProfile()
-  const pkg = profile.package_type
+  const supabase = await createClient()
+
+  // Get current user and package type
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  let pkg = 'pack1'
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('package_type')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      pkg = profile.package_type || 'pack1'
+    }
+  }
+
   const pkgConfig = PACKAGE_CONFIGS[pkg]
 
   return (

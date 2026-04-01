@@ -1,6 +1,6 @@
 'use client'
 
-import { useTransition } from 'react'
+import React, { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { propertySchema, type PropertyFormValues } from '@/lib/validations/property'
@@ -20,6 +20,7 @@ interface PropertyFormProps {
 
 export default function PropertyForm({ property }: PropertyFormProps) {
   const [isPending, startTransition] = useTransition()
+  const [serverError, setServerError] = React.useState<string | null>(null)
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<PropertyFormValues>({
     resolver: zodResolver(propertySchema),
@@ -53,17 +54,37 @@ export default function PropertyForm({ property }: PropertyFormProps) {
       if (v !== undefined && v !== null) formData.append(k, String(v))
     })
 
+    setServerError(null)
     startTransition(async () => {
-      if (property) {
-        await updateProperty(property.id, formData)
-      } else {
-        await createProperty(formData)
+      try {
+        if (property) {
+          const result = await updateProperty(property.id, formData)
+          if (result?.error) {
+            const msg = typeof result.error === 'string' ? result.error : JSON.stringify(result.error)
+            setServerError(msg)
+          }
+        } else {
+          const result = await createProperty(formData)
+          if (result?.error) {
+            const msg = typeof result.error === 'string' ? result.error : JSON.stringify(result.error)
+            setServerError(msg)
+          }
+        }
+      } catch (err) {
+        setServerError(err instanceof Error ? err.message : 'Bir hata oluştu')
       }
     })
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-3xl">
+      {/* Error Message */}
+      {serverError && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+          <p className="text-red-400 text-sm">{serverError}</p>
+        </div>
+      )}
+
       {/* Temel Bilgiler */}
       <div className="bg-slate-900 rounded-xl p-6 space-y-4">
         <h2 className="text-white font-semibold">Temel Bilgiler</h2>

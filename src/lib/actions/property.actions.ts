@@ -28,7 +28,7 @@ export async function createProperty(formData: FormData) {
   const { count: currentCount } = await supabase
     .from('properties')
     .select('*', { count: 'exact', head: true })
-    .eq('agent_id', user.id)
+    .eq('user_id', user.id)
     .is('deleted_at', null)
 
   if (!canCreateProperty(pkg, currentCount ?? 0)) {
@@ -46,7 +46,7 @@ export async function createProperty(formData: FormData) {
 
   const { error } = await supabase.from('properties').insert({
     ...parsed.data,
-    agent_id: user.id,
+    user_id: user.id,
   })
 
   if (error) return { error: error.message }
@@ -71,7 +71,7 @@ export async function updateProperty(id: string, formData: FormData) {
     .from('properties')
     .update({ ...parsed.data, updated_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('agent_id', user.id)
+    .eq('user_id', user.id)
 
   if (error) return { error: error.message }
 
@@ -92,7 +92,7 @@ export async function deleteProperty(id: string) {
     .from('properties')
     .update({ deleted_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('agent_id', user.id)
+    .eq('user_id', user.id)
 
   if (error) return { error: error.message }
 

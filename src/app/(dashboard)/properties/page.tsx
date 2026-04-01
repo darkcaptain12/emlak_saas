@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
-import { getAuthenticatedProfile } from '@/lib/auth'
 import { canCreateProperty, getPropertyLimitStatus } from '@/lib/permissions'
 import { PACKAGE_CONFIGS } from '@/lib/config/packages'
 import PageHeader from '@/components/layout/PageHeader'
@@ -28,8 +27,26 @@ interface PropertiesPageProps {
 
 export default async function PropertiesPage({ searchParams }: PropertiesPageProps) {
   const sp = await searchParams
-  const { profile } = await getAuthenticatedProfile()
   const supabase = await createClient()
+
+  // Get current user and package type
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  let pkg = 'pack1'
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('package_type')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      pkg = profile.package_type || 'pack1'
+    }
+  }
 
   let query = supabase
     .from('properties')
@@ -54,7 +71,6 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
     .is('deleted_at', null)
 
   const currentCount = totalCount ?? 0
-  const pkg = profile.package_type
   const pkgConfig = PACKAGE_CONFIGS[pkg]
   const limitReached = !canCreateProperty(pkg, currentCount)
   const limitStatus = getPropertyLimitStatus(pkg, currentCount)
