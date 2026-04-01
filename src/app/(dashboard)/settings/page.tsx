@@ -237,10 +237,15 @@ export default function SettingsPage() {
           {/* Price row */}
           <div className="flex items-end gap-1 mb-4">
             <span className="text-2xl font-bold text-white">
-              {formatPackagePrice(pkgConfig.priceMonthly)}
+              {formatPackagePrice(pkgConfig.priceOneTime)}
             </span>
-            <span className="text-slate-400 text-sm mb-0.5">/ay</span>
+            <span className="text-slate-400 text-sm mb-0.5">tek seferlik</span>
           </div>
+          {pkgConfig.maintenanceFee && (
+            <p className="text-slate-600 text-xs mb-5">
+              + {formatPackagePrice(pkgConfig.maintenanceFee)}/ay bakım ücreti
+            </p>
+          )}
 
           {/* Features */}
           <ul className="space-y-2 mb-5">
