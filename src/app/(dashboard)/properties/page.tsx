@@ -9,7 +9,7 @@ import EmptyState from '@/components/shared/EmptyState'
 import { formatCurrency, formatRelativeDate } from '@/lib/utils'
 import { Building2, MapPin, Maximize2, BedDouble, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
-import type { Property, PropertyStatus, PropertyType, ListingType } from '@/types'
+import type { Property, PropertyStatus, PropertyType, ListingType, PackageType } from '@/types'
 
 const TYPE_LABELS: Record<string, string> = {
   apartment: 'Daire', house: 'Müstakil', land: 'Arsa', commercial: 'Ticari', other: 'Diğer',
@@ -34,7 +34,7 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
     data: { user },
   } = await supabase.auth.getUser()
 
-  let pkg = 'pack1'
+  let pkg: PackageType = 'pack1'
 
   if (user) {
     const { data: profile } = await supabase

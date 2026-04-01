@@ -3,6 +3,7 @@ import PackageComparison from '@/components/packages/PackageComparison'
 import { Package, MessageCircle } from 'lucide-react'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
 import { PACKAGE_CONFIGS } from '@/lib/config/packages'
+import type { PackageType } from '@/types'
 
 export default async function PackagesPage() {
   const supabase = await createClient()
@@ -12,7 +13,7 @@ export default async function PackagesPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  let pkg = 'pack1'
+  let pkg: PackageType = 'pack1'
 
   if (user) {
     const { data: profile } = await supabase
