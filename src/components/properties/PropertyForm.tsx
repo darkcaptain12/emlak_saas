@@ -23,7 +23,7 @@ export default function PropertyForm({ property }: PropertyFormProps) {
   const [serverError, setServerError] = React.useState<string | null>(null)
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<PropertyFormValues>({
-    resolver: zodResolver(propertySchema),
+    resolver: zodResolver(propertySchema) as any,
     defaultValues: property ? {
       title: property.title,
       description: property.description || '',
