@@ -6,9 +6,12 @@ import { createClient } from '@/lib/supabase/server'
 import { propertySchema } from '@/lib/validations/property'
 import { canCreateProperty } from '@/lib/permissions'
 import { PACKAGE_CONFIGS } from '@/lib/config/packages'
+import { isDemoUser, DEMO_ERROR } from '@/lib/demo'
 import type { PackageType } from '@/types'
 
 export async function createProperty(formData: FormData) {
+  if (await isDemoUser()) return { error: DEMO_ERROR }
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -57,6 +60,8 @@ export async function createProperty(formData: FormData) {
 }
 
 export async function updateProperty(id: string, formData: FormData) {
+  if (await isDemoUser()) return { error: DEMO_ERROR }
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -82,6 +87,8 @@ export async function updateProperty(id: string, formData: FormData) {
 }
 
 export async function deleteProperty(id: string) {
+  if (await isDemoUser()) return { error: DEMO_ERROR }
+
   const supabase = await createClient()
   const {
     data: { user },
