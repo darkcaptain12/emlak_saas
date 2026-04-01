@@ -4,11 +4,9 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { leadSchema } from '@/lib/validations/lead'
-import { isDemoUser, DEMO_ERROR } from '@/lib/demo'
 import type { LeadStatus } from '@/types'
 
 export async function createLeadAction(formData: FormData) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -30,7 +28,6 @@ export async function createLeadAction(formData: FormData) {
 }
 
 export async function updateLeadAction(id: string, formData: FormData) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -54,7 +51,6 @@ export async function updateLeadAction(id: string, formData: FormData) {
 }
 
 export async function updateLeadStatus(id: string, status: LeadStatus) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -73,7 +69,6 @@ export async function updateLeadStatus(id: string, status: LeadStatus) {
 }
 
 export async function addLeadNote(leadId: string, body: string) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -92,7 +87,6 @@ export async function addLeadNote(leadId: string, body: string) {
 }
 
 export async function deleteLeadAction(id: string) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

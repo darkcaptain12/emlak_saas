@@ -4,10 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { clientSchema } from '@/lib/validations/client'
-import { isDemoUser, DEMO_ERROR } from '@/lib/demo'
 
 export async function createClientAction(formData: FormData) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -29,7 +27,6 @@ export async function createClientAction(formData: FormData) {
 }
 
 export async function updateClientAction(id: string, formData: FormData) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -53,7 +50,6 @@ export async function updateClientAction(id: string, formData: FormData) {
 }
 
 export async function deleteClientAction(id: string) {
-  if (await isDemoUser()) return { error: DEMO_ERROR }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
