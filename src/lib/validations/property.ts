@@ -8,21 +8,14 @@ export const propertySchema = z.object({
   status: z.enum(['active', 'pending', 'sold', 'rented', 'passive']),
   price: z.coerce.number().positive('Fiyat pozitif olmalı'),
   currency: z.string(),
-  area_sqm: z.coerce.number().positive().optional().or(z.literal('')),
-  rooms: z.coerce.number().int().positive().optional().or(z.literal('')),
-  bathrooms: z.coerce.number().int().positive().optional().or(z.literal('')),
-  floor: z.coerce.number().int().optional().or(z.literal('')),
-  total_floors: z.coerce.number().int().positive().optional().or(z.literal('')),
+  area_sqm: z.union([z.literal(''), z.coerce.number().positive()]).optional().transform(v => v === '' ? undefined : v),
+  rooms: z.union([z.literal(''), z.coerce.number().int().positive()]).optional().transform(v => v === '' ? undefined : v),
+  bathrooms: z.union([z.literal(''), z.coerce.number().int().positive()]).optional().transform(v => v === '' ? undefined : v),
+  floor: z.union([z.literal(''), z.coerce.number().int()]).optional().transform(v => v === '' ? undefined : v),
+  total_floors: z.union([z.literal(''), z.coerce.number().int().positive()]).optional().transform(v => v === '' ? undefined : v),
   city: z.string().min(2, 'Şehir gerekli'),
   district: z.string().optional(),
   address_line: z.string().optional(),
-}).transform((data) => ({
-  ...data,
-  area_sqm: data.area_sqm === '' ? undefined : data.area_sqm,
-  rooms: data.rooms === '' ? undefined : data.rooms,
-  bathrooms: data.bathrooms === '' ? undefined : data.bathrooms,
-  floor: data.floor === '' ? undefined : data.floor,
-  total_floors: data.total_floors === '' ? undefined : data.total_floors,
-}))
+})
 
 export type PropertyFormValues = z.infer<typeof propertySchema>
