@@ -3,8 +3,8 @@ import type { PackageType } from '@/types'
 export interface PackageConfig {
   id: PackageType
   name: string
-  priceSetup: number
-  priceMaintenanceMonthly: number
+  priceOneTime: number
+  maintenanceFee?: number
   propertyLimit: number | null
   highlight?: boolean
   features: string[]
@@ -15,8 +15,8 @@ export const PACKAGE_CONFIGS: Record<PackageType, PackageConfig> = {
   pack1: {
     id: 'pack1',
     name: 'Başlangıç',
-    priceSetup: 0,
-    priceMaintenanceMonthly: 990,
+    priceOneTime: 9900,
+    maintenanceFee: 990,
     propertyLimit: 20,
     color: 'slate',
     features: [
@@ -31,8 +31,8 @@ export const PACKAGE_CONFIGS: Record<PackageType, PackageConfig> = {
   pack2: {
     id: 'pack2',
     name: 'Profesyonel',
-    priceSetup: 5000,
-    priceMaintenanceMonthly: 1990,
+    priceOneTime: 19900,
+    maintenanceFee: 1990,
     propertyLimit: 100,
     highlight: true,
     color: 'blue',
@@ -50,8 +50,8 @@ export const PACKAGE_CONFIGS: Record<PackageType, PackageConfig> = {
   pack3: {
     id: 'pack3',
     name: 'Kurumsal',
-    priceSetup: 15000,
-    priceMaintenanceMonthly: 3990,
+    priceOneTime: 39900,
+    maintenanceFee: 3990,
     propertyLimit: null,
     color: 'purple',
     features: [
