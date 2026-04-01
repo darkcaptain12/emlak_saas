@@ -13,7 +13,7 @@ import LeadStatusChart from '@/components/dashboard/LeadStatusChart'
 import PropertyTypeChart from '@/components/dashboard/PropertyTypeChart'
 import MonthlyLeadChart from '@/components/dashboard/MonthlyLeadChart'
 import PropertyStatusChart from '@/components/dashboard/PropertyStatusChart'
-import type { Property, Client } from '@/types'
+import type { Property, Client, PackageType } from '@/types'
 
 const LEAD_STATUS_COLORS: Record<string, string> = {
   new: '#3b82f6',
@@ -87,7 +87,7 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser()
 
   // Get profile if user exists
-  let pkg = 'pack1'
+  let pkg: PackageType = 'pack1'
   let agency_name: string | null = null
 
   if (user) {
