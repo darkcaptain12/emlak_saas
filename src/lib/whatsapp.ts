@@ -23,7 +23,7 @@ export function buildWhatsAppUrl(
   currentPackage: PackageType
 ): string {
   const number =
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, '') ?? '905551234567'
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, '') ?? '905315661805'
   const message = generateWhatsAppPackageMessage(type, currentPackage)
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
 }
