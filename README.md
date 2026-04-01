@@ -167,3 +167,4 @@ npm run dev      # Geliştirme sunucusu (webpack modu)
 npm run build    # Production build
 npm run lint     # ESLint
 ```
+# emlak_saas
