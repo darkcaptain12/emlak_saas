@@ -145,8 +145,6 @@ export default async function DashboardPage() {
   const activeRentals = rentals?.filter((r) => r.status === 'active').length || 0
   const cancelledRentals = rentals?.filter((r) => r.status === 'ended' || r.status === 'paused').length || 0
   const openLeads = leads.filter((l) => l.status !== 'won' && l.status !== 'lost').length
-  const totalDecidedLeads = wonLeads + lostLeads
-  const conversionRate = totalDecidedLeads > 0 ? Math.round((wonLeads / totalDecidedLeads) * 100) : 0
 
   // Limit check
   const limitStatus = getPropertyLimitStatus(pkgForFunctions, totalProperties)
@@ -250,14 +248,6 @@ export default async function DashboardPage() {
       color: 'text-red-400',
       bg: 'bg-red-500/10',
       border: 'border-red-500/20',
-    },
-    {
-      label: 'Dönüşüm Oranı',
-      value: `%${conversionRate}`,
-      icon: BarChart2,
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/20',
     },
   ]
 
