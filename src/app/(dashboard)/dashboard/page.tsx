@@ -87,7 +87,7 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser()
 
   // Get profile if user exists
-  let pkg: PackageType = 'pack1'
+  let pkg: PackageType | null = null
   let agency_name: string | null = null
 
   if (user) {
@@ -98,13 +98,30 @@ export default async function DashboardPage() {
       .single()
 
     if (profile) {
-      pkg = profile.package_type || 'pack1'
+      pkg = profile.package_type ?? null
       agency_name = profile.agency_name
     }
   }
 
-  const showAdvanced = canAccessAdvancedDashboard(pkg)
-  const showPremium = canAccessPremiumAnalytics(pkg)
+  // Paket atanmamışsa uyarı göster
+  if (!pkg) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-10 max-w-md">
+          <div className="text-5xl mb-4">🏠</div>
+          <h2 className="text-white text-xl font-bold mb-2">Hesabınız Hazırlanıyor</h2>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Hesabınıza henüz bir paket atanmamıştır. Yönetici ile iletişime geçerek paketinizi aktif ettiriniz.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  const pkgForFunctions: PackageType = pkg
+
+  const showAdvanced = canAccessAdvancedDashboard(pkgForFunctions)
+  const showPremium = canAccessPremiumAnalytics(pkgForFunctions)
 
   // Parallel data fetch
   const [
