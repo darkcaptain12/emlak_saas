@@ -5,12 +5,14 @@ import { deleteProperty } from '@/lib/actions/property.actions'
 import PageHeader from '@/components/layout/PageHeader'
 import PropertyStatusBadge from '@/components/properties/PropertyStatusBadge'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
+import RentalsList from '@/components/rentals/RentalsList'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { canManageRentals } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/lib/button-variants'
 import { cn } from '@/lib/utils'
 import { MapPin, Maximize2, BedDouble, Bath, Layers, Pencil, Trash2 } from 'lucide-react'
-import type { Property } from '@/types'
+import type { Property, Client } from '@/types'
 
 const TYPE_LABELS: Record<string, string> = {
   apartment: 'Daire', house: 'Müstakil Ev', land: 'Arsa', commercial: 'Ticari', other: 'Diğer',
@@ -20,6 +22,10 @@ const LISTING_LABELS: Record<string, string> = { sale: 'Satılık', rent: 'Kiral
 export default async function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const { data: property } = await supabase
     .from('properties')
@@ -31,6 +37,26 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
   if (!property) notFound()
 
   const p = property as Property
+
+  // Kiracı yönetimi için gerekli veriler
+  let userPackage = 'pack1'
+  let clients: Client[] = []
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('package_type')
+      .eq('id', user.id)
+      .single()
+    userPackage = profile?.package_type || 'pack1'
+
+    const { data: clientsData } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('agent_id', user.id)
+      .is('deleted_at', null)
+    clients = (clientsData as Client[]) || []
+  }
 
   async function handleDelete() {
     'use server'
@@ -148,6 +174,17 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
           </div>
         </div>
       </div>
+
+      {/* Kiracılar Bölümü */}
+      {p.listing_type === 'rent' && (
+        <div className="mt-8 pt-8 border-t border-slate-800">
+          <RentalsList
+            propertyId={id}
+            clients={clients}
+            canManageRentals={canManageRentals(userPackage as any)}
+          />
+        </div>
+      )}
     </div>
   )
 }
