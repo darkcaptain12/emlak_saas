@@ -11,7 +11,7 @@ import { canManageRentals } from '@/lib/permissions'
 import { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/lib/button-variants'
 import { cn } from '@/lib/utils'
-import { MapPin, Maximize2, BedDouble, Bath, Layers, Pencil, Trash2 } from 'lucide-react'
+import { MapPin, Maximize2, BedDouble, Bath, Layers, Pencil, Trash2, TrendingUp } from 'lucide-react'
 import type { Property, Client } from '@/types'
 
 const TYPE_LABELS: Record<string, string> = {
@@ -38,7 +38,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
   const p = property as Property
 
-  // Kiracı yönetimi için gerekli veriler
+  // Kiracı yönetimi ve lead takibi için gerekli veriler
   let userPackage = 'pack1'
   let clients: Client[] = []
 
@@ -175,7 +175,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         </div>
       </div>
 
-      {/* Kiracılar Bölümü */}
+      {/* Kiracılar Bölümü - Kiralık Mülkler */}
       {p.listing_type === 'rent' && (
         <div className="mt-8 pt-8 border-t border-slate-800">
           <RentalsList
@@ -183,6 +183,22 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             clients={clients}
             canManageRentals={canManageRentals(userPackage as any)}
           />
+        </div>
+      )}
+
+      {/* Lead Takip - Satılık Mülkler */}
+      {p.listing_type === 'sale' && (
+        <div className="mt-8 pt-8 border-t border-slate-800">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-slate-400" />
+              <h2 className="text-white font-semibold">Teklifler & Lead Takip</h2>
+            </div>
+          </div>
+          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center">
+            <p className="text-slate-400 text-sm">Bu mülk için henüz teklif veya lead yok.</p>
+            <p className="text-slate-500 text-xs mt-2">Lead Takip sayfasından müşteri ekleyerek bu mülkü takip edebilirsiniz.</p>
+          </div>
         </div>
       )}
     </div>
