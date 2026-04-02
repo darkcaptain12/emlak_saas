@@ -69,3 +69,25 @@ export function getPrevPackage(current: PackageType): PackageType | null {
   if (current === 'pack2') return 'pack1'
   return null
 }
+
+// Kiralık Yönetim İzinleri (Rental Management Permissions)
+
+export function canManageRentals(packageType: PackageType): boolean {
+  return packageType === 'pack1' || packageType === 'pack2' || packageType === 'pack3'
+}
+
+export function canTrackPayments(packageType: PackageType): boolean {
+  return packageType === 'pack2' || packageType === 'pack3'
+}
+
+export function canManageDocuments(packageType: PackageType): boolean {
+  return packageType === 'pack3'
+}
+
+export function canCommunicate(packageType: PackageType): boolean {
+  return packageType === 'pack3'
+}
+
+export function canMultiTenant(packageType: PackageType): boolean {
+  return packageType === 'pack3'
+}

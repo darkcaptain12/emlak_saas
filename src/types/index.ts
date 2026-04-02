@@ -94,3 +94,63 @@ export interface LeadNote {
   body: string
   created_at: string
 }
+
+export type RentalStatus = 'active' | 'ended' | 'paused'
+export type RentalPaymentStatus = 'pending' | 'paid' | 'late' | 'partial'
+export type RentalDocumentType = 'lease' | 'identification' | 'other'
+export type RentalCommunicationType = 'note' | 'reminder' | 'complaint' | 'other'
+
+export interface Rental {
+  id: string
+  property_id: string
+  tenant_id: string
+  agent_id: string
+  monthly_rent_amount: number
+  rent_due_day: number
+  start_date: string
+  end_date: string | null
+  status: RentalStatus
+  notes: string | null
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+
+  // Relations (optional, populated on demand)
+  property?: Property
+  tenant?: Client
+  payments?: RentalPayment[]
+}
+
+export interface RentalPayment {
+  id: string
+  rental_id: string
+  due_date: string
+  paid_date: string | null
+  amount_due: number
+  amount_paid: number | null
+  status: RentalPaymentStatus
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface RentalDocument {
+  id: string
+  rental_id: string
+  document_type: RentalDocumentType
+  file_url: string
+  file_name: string
+  file_size_bytes: number | null
+  uploaded_by: string | null
+  created_at: string
+  deleted_at: string | null
+}
+
+export interface RentalCommunicationLog {
+  id: string
+  rental_id: string
+  message: string
+  message_type: RentalCommunicationType
+  logged_by: string
+  created_at: string
+}
