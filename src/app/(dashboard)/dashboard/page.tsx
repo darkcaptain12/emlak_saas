@@ -103,22 +103,8 @@ export default async function DashboardPage() {
     }
   }
 
-  // Paket atanmamışsa uyarı göster
-  if (!pkg) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-10 max-w-md">
-          <div className="text-5xl mb-4">🏠</div>
-          <h2 className="text-white text-xl font-bold mb-2">Hesabınız Hazırlanıyor</h2>
-          <p className="text-slate-400 text-sm leading-relaxed">
-            Hesabınıza henüz bir paket atanmamıştır. Yönetici ile iletişime geçerek paketinizi aktif ettiriniz.
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  const pkgForFunctions: PackageType = pkg
+  // Paket yoksa pack1 seviyesinde göster, ama banner ile bildir
+  const pkgForFunctions: PackageType = pkg ?? 'pack1'
 
   const showAdvanced = canAccessAdvancedDashboard(pkgForFunctions)
   const showPremium = canAccessPremiumAnalytics(pkgForFunctions)
@@ -155,7 +141,7 @@ export default async function DashboardPage() {
   const conversionRate = totalDecidedLeads > 0 ? Math.round((wonLeads / totalDecidedLeads) * 100) : 0
 
   // Limit check
-  const limitStatus = getPropertyLimitStatus(pkg, totalProperties)
+  const limitStatus = getPropertyLimitStatus(pkgForFunctions, totalProperties)
 
   // Chart data
   const leadStatusData = Object.entries(LEAD_STATUS_LABELS).map(([status, name]) => ({
@@ -255,6 +241,19 @@ export default async function DashboardPage() {
 
   return (
     <div>
+      {/* Paketsiz uyarı */}
+      {!pkg && (
+        <div className="mb-6 bg-amber-500/10 border border-amber-500/30 rounded-xl px-5 py-4 flex items-start gap-3">
+          <div className="text-amber-400 text-xl mt-0.5">⚠️</div>
+          <div>
+            <p className="text-amber-300 font-medium text-sm">Hesabınıza henüz paket atanmamıştır</p>
+            <p className="text-amber-400/70 text-xs mt-0.5">
+              Yönetici paketinizi aktif ettiğinde tüm özelliklere erişebilirsiniz. Şimdilik platformu inceleyebilirsiniz.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
