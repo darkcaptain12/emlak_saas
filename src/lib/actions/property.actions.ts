@@ -23,7 +23,11 @@ export async function createProperty(formData: FormData) {
     .eq('id', user.id)
     .single()
 
-  const pkg = (profile?.package_type as PackageType) ?? 'pack1'
+  if (!profile?.package_type) {
+    return { error: 'Aktif bir paketiniz bulunmamaktadır. Lütfen bir paket satın alın.' }
+  }
+
+  const pkg = profile.package_type as PackageType
   const pkgConfig = PACKAGE_CONFIGS[pkg]
 
   const { count: currentCount } = await supabase
@@ -65,6 +69,9 @@ export async function updateProperty(id: string, formData: FormData) {
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  const { data: profile } = await supabase.from('profiles').select('package_type').eq('id', user.id).single()
+  if (!profile?.package_type) return { error: 'Aktif bir paketiniz bulunmamaktadır.' }
+
   const raw = Object.fromEntries(formData)
   const parsed = propertySchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.flatten().fieldErrors }
@@ -90,6 +97,9 @@ export async function deleteProperty(id: string) {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  const { data: profile } = await supabase.from('profiles').select('package_type').eq('id', user.id).single()
+  if (!profile?.package_type) return { error: 'Aktif bir paketiniz bulunmamaktadır.' }
 
   const { error } = await supabase
     .from('properties')

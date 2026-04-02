@@ -5,11 +5,20 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { clientSchema } from '@/lib/validations/client'
 
+async function checkPackage(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
+  const { data } = await supabase.from('profiles').select('package_type').eq('id', userId).single()
+  return !!data?.package_type
+}
+
 export async function createClientAction(formData: FormData) {
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  if (!await checkPackage(supabase, user.id)) {
+    return { error: 'Aktif bir paketiniz bulunmamaktadır. Lütfen bir paket satın alın.' }
+  }
 
   const raw = Object.fromEntries(formData)
   const parsed = clientSchema.safeParse(raw)
@@ -31,6 +40,10 @@ export async function updateClientAction(id: string, formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  if (!await checkPackage(supabase, user.id)) {
+    return { error: 'Aktif bir paketiniz bulunmamaktadır.' }
+  }
 
   const raw = Object.fromEntries(formData)
   const parsed = clientSchema.safeParse(raw)
@@ -54,6 +67,10 @@ export async function deleteClientAction(id: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  if (!await checkPackage(supabase, user.id)) {
+    return { error: 'Aktif bir paketiniz bulunmamaktadır.' }
+  }
 
   const { error } = await supabase
     .from('clients')

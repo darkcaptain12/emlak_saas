@@ -82,32 +82,22 @@ export default function PackageComparison({ currentPackage }: PackageComparisonP
             </ul>
 
             {/* CTA */}
-            {isCurrent ? (
-              <div className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium">
-                <Check className="w-4 h-4" />
-                Aktif Plan
-              </div>
-            ) : isUpgrade ? (
-              <a
-                href={buildWhatsAppUrl('upgrade', currentPackage)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
-              >
-                <Zap className="w-4 h-4" />
-                Bu Plana Geç
-              </a>
-            ) : isDowngrade ? (
-              <a
-                href={buildWhatsAppUrl('downgrade', currentPackage)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-sm font-medium transition-colors"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Düşürme Talebi
-              </a>
-            ) : null}
+            <a
+              href={buildWhatsAppUrl(isUpgrade ? 'upgrade' : isDowngrade ? 'downgrade' : 'info', currentPackage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                'flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-colors',
+                isCurrent
+                  ? 'bg-green-600 hover:bg-green-500 text-white'
+                  : isUpgrade
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                  : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300'
+              )}
+            >
+              <MessageCircle className="w-4 h-4" />
+              {isCurrent ? 'Planı Yenile / Bilgi Al' : isUpgrade ? 'Bu Plana Geç' : 'Düşürme Talebi'}
+            </a>
           </div>
         )
       })}

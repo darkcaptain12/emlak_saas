@@ -241,19 +241,6 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      {/* Paketsiz uyarı */}
-      {!pkg && (
-        <div className="mb-6 bg-amber-500/10 border border-amber-500/30 rounded-xl px-5 py-4 flex items-start gap-3">
-          <div className="text-amber-400 text-xl mt-0.5">⚠️</div>
-          <div>
-            <p className="text-amber-300 font-medium text-sm">Hesabınıza henüz paket atanmamıştır</p>
-            <p className="text-amber-400/70 text-xs mt-0.5">
-              Yönetici paketinizi aktif ettiğinde tüm özelliklere erişebilirsiniz. Şimdilik platformu inceleyebilirsiniz.
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -269,7 +256,7 @@ export default async function DashboardPage() {
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-medium transition-colors"
         >
           <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-          {pkg === 'pack1' ? 'Başlangıç' : pkg === 'pack2' ? 'Profesyonel' : 'Kurumsal'}
+          {pkgForFunctions === 'pack1' ? 'Başlangıç' : pkgForFunctions === 'pack2' ? 'Profesyonel' : 'Kurumsal'}
           <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
