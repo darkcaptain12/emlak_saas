@@ -142,8 +142,8 @@ export default async function DashboardPage() {
   const activeProperties = props.filter((p) => p.status === 'active').length
   const pendingProperties = props.filter((p) => p.status === 'pending').length
   const soldOrRented = props.filter((p) => p.status === 'sold' || p.status === 'rented').length
-  const wonLeads = leads.filter((l) => l.status === 'won').length
-  const lostLeads = leads.filter((l) => l.status === 'lost').length
+  const activeRentals = rentals?.filter((r) => r.status === 'active').length || 0
+  const cancelledRentals = rentals?.filter((r) => r.status === 'ended' || r.status === 'paused').length || 0
   const openLeads = leads.filter((l) => l.status !== 'won' && l.status !== 'lost').length
   const totalDecidedLeads = wonLeads + lostLeads
   const conversionRate = totalDecidedLeads > 0 ? Math.round((wonLeads / totalDecidedLeads) * 100) : 0
@@ -236,16 +236,16 @@ export default async function DashboardPage() {
       border: 'border-emerald-500/20',
     },
     {
-      label: 'Kazanılan Lead',
-      value: wonLeads,
+      label: 'Aktif Kiracı',
+      value: activeRentals,
       icon: Trophy,
       color: 'text-green-400',
       bg: 'bg-green-500/10',
       border: 'border-green-500/20',
     },
     {
-      label: 'Kaybedilen Lead',
-      value: lostLeads,
+      label: 'İptal Edilen',
+      value: cancelledRentals,
       icon: XCircle,
       color: 'text-red-400',
       bg: 'bg-red-500/10',
