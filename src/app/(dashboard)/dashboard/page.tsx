@@ -1,9 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
-import { getPropertyLimitStatus, canAccessAdvancedDashboard, canAccessPremiumAnalytics } from '@/lib/permissions'
+import { getPropertyLimitStatus, canAccessAdvancedDashboard, canAccessPremiumAnalytics, canTrackPayments } from '@/lib/permissions'
 import { formatCurrency, formatRelativeDate } from '@/lib/utils'
 import {
   Building2, Users, TrendingUp, CheckCircle2, MapPin,
-  Trophy, XCircle, Tag, BarChart2, ArrowRight,
+  Trophy, XCircle, Tag, BarChart2, ArrowRight, DollarSign,
 } from 'lucide-react'
 import Link from 'next/link'
 import PropertyStatusBadge from '@/components/properties/PropertyStatusBadge'
@@ -116,6 +116,8 @@ export default async function DashboardPage() {
     { count: totalClients },
     { data: recentProperties },
     { data: recentClients },
+    { data: rentals },
+    { data: rentalPayments },
   ] = await Promise.all([
     supabase.from('properties').select('id, status, property_type, title, city, price, currency, created_at').is('deleted_at', null),
     supabase.from('leads').select('id, status, created_at'),
@@ -123,6 +125,12 @@ export default async function DashboardPage() {
     supabase.from('properties').select('*').is('deleted_at', null).order('created_at', { ascending: false }).limit(5),
     showAdvanced
       ? supabase.from('clients').select('*').is('deleted_at', null).order('created_at', { ascending: false }).limit(5)
+      : Promise.resolve({ data: null }),
+    canTrackPayments(pkgForFunctions)
+      ? supabase.from('rentals').select('*').eq('agent_id', user?.id || '').eq('status', 'active').is('deleted_at', null)
+      : Promise.resolve({ data: null }),
+    canTrackPayments(pkgForFunctions)
+      ? supabase.from('rental_payments').select('amount_due, status, due_date').is('deleted_at', null)
       : Promise.resolve({ data: null }),
   ])
 
@@ -162,6 +170,24 @@ export default async function DashboardPage() {
   }))
 
   const monthlyLeadData = showAdvanced ? computeMonthlyLeads(leads) : []
+
+  // Rental stats (Pack2+)
+  let monthlyRentCollected = 0
+  let monthlyRentDue = 0
+  if (canTrackPayments(pkgForFunctions) && rentalPayments) {
+    const today = new Date()
+    const currentMonth = today.getFullYear() * 100 + today.getMonth() + 1
+
+    rentalPayments.forEach((payment: any) => {
+      const paymentMonth = new Date(payment.due_date).getFullYear() * 100 + (new Date(payment.due_date).getMonth() + 1)
+      if (paymentMonth === currentMonth) {
+        monthlyRentDue += payment.amount_due
+        if (payment.status === 'paid') {
+          monthlyRentCollected += payment.amount_due
+        }
+      }
+    })
+  }
 
   // Base stats (all packages)
   const baseStats = [
@@ -234,6 +260,21 @@ export default async function DashboardPage() {
       border: 'border-blue-500/20',
     },
   ]
+
+  // Rental stats (pack2+)
+  const rentalStats = canTrackPayments(pkgForFunctions)
+    ? [
+        {
+          label: 'Bu Ay Toplam Kira',
+          value: formatCurrency(monthlyRentCollected, 'TRY'),
+          subtext: `${formatCurrency(monthlyRentDue, 'TRY')} - Bekleniyor`,
+          icon: DollarSign,
+          color: 'text-emerald-400',
+          bg: 'bg-emerald-500/10',
+          border: 'border-emerald-500/20',
+        },
+      ]
+    : []
 
   const hasProperties = totalProperties > 0
   const hasClients = (totalClients ?? 0) > 0
@@ -316,6 +357,31 @@ export default async function DashboardPage() {
       )}
 
       {!showAdvanced && <div className="mb-8" />}
+
+      {/* Rental Stats (pack2+) */}
+      {canTrackPayments(pkgForFunctions) && rentalStats.length > 0 && (
+        <div className="grid grid-cols-1 gap-4 mb-8">
+          {rentalStats.map((stat) => (
+            <div
+              key={stat.label}
+              className={`bg-slate-900 rounded-xl p-6 border ${stat.border}`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-slate-400 text-sm mb-1">{stat.label}</p>
+                  <p className="text-3xl font-bold text-white">{stat.value}</p>
+                  {stat.subtext && (
+                    <p className="text-slate-500 text-xs mt-2">{stat.subtext}</p>
+                  )}
+                </div>
+                <div className={`w-12 h-12 ${stat.bg} rounded-lg flex items-center justify-center`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
