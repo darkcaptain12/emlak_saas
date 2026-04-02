@@ -65,11 +65,11 @@ export async function POST(request: NextRequest) {
     // Check property ownership
     const { data: property } = await supabase
       .from('properties')
-      .select('id, agent_id')
+      .select('id, user_id')
       .eq('id', body.property_id)
       .single()
 
-    if (!property || property.agent_id !== user.id) {
+    if (!property || property.user_id !== user.id) {
       return NextResponse.json(
         { error: 'Property not found or unauthorized' },
         { status: 403 }

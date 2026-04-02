@@ -1,5 +1,16 @@
 -- Kiralık Yönetim Sistemi (Rental Management System)
 
+-- Helper function for updating timestamps
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+---
+
 -- 1. Kiralıklar Tablosu (Rentals)
 CREATE TABLE rentals (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
