@@ -13,7 +13,6 @@ import {
   Settings,
   LogOut,
   Home,
-  Package,
   Menu,
   X,
 } from 'lucide-react'
@@ -25,7 +24,6 @@ const navItems = [
   { href: '/properties', label: 'İlanlar', icon: Building2 },
   { href: '/clients', label: 'Müşteriler', icon: Users },
   { href: '/leads', label: 'Lead Takip', icon: TrendingUp },
-  { href: '/packages', label: 'Paketler', icon: Package },
   { href: '/settings', label: 'Ayarlar', icon: Settings },
 ]
 
