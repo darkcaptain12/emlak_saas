@@ -276,7 +276,7 @@ export default async function DashboardPage() {
 
       {/* Package banner */}
       <PackageBanner
-        packageType={pkg}
+        packageType={pkgForFunctions}
         propertyCount={totalProperties}
         limitStatus={limitStatus}
       />

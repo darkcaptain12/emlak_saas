@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 // WhatsApp numaranı buraya yaz (başında 90 ile, boşluksuz)
-const WHATSAPP_NUMBER = '905XXXXXXXXX'
+const WHATSAPP_NUMBER = '905315661805'
 
 const PACKAGES = [
   {
