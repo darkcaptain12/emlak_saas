@@ -19,8 +19,8 @@ const COLUMNS: {
   { id: 'contacted', label: 'İletişimde', color: 'border-yellow-500', bgColor: 'bg-yellow-500/10', dotColor: 'bg-yellow-500' },
   { id: 'viewing',   label: 'Geziliyor',  color: 'border-orange-500', bgColor: 'bg-orange-500/10', dotColor: 'bg-orange-500' },
   { id: 'offer',     label: 'Teklif',     color: 'border-purple-500', bgColor: 'bg-purple-500/10', dotColor: 'bg-purple-500' },
-  { id: 'won',       label: 'Kazanıldı',  color: 'border-green-500',  bgColor: 'bg-green-500/10',  dotColor: 'bg-green-500' },
-  { id: 'lost',      label: 'Kaybedildi', color: 'border-red-500',    bgColor: 'bg-red-500/10',    dotColor: 'bg-red-500' },
+  { id: 'won',       label: 'Aktif Kiracı',  color: 'border-green-500',  bgColor: 'bg-green-500/10',  dotColor: 'bg-green-500' },
+  { id: 'lost',      label: 'Ev Sahibi', color: 'border-red-500',    bgColor: 'bg-red-500/10',    dotColor: 'bg-red-500' },
 ]
 
 type KanbanLead = Omit<Lead, 'clients' | 'properties'> & {

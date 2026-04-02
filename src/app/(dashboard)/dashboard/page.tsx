@@ -29,8 +29,8 @@ const LEAD_STATUS_LABELS: Record<string, string> = {
   contacted: 'İletişimde',
   viewing: 'Geziliyor',
   offer: 'Teklif',
-  won: 'Kazanıldı',
-  lost: 'Kaybedildi',
+  won: 'Aktif Kiracı',
+  lost: 'Ev Sahibi',
 }
 
 const PROPERTY_TYPE_LABELS: Record<string, string> = {

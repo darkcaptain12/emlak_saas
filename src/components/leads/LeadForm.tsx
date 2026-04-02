@@ -111,8 +111,8 @@ export default function LeadForm({ lead, clients, properties, defaultClientId }:
                 <SelectItem value="contacted">İletişimde</SelectItem>
                 <SelectItem value="viewing">Geziliyor</SelectItem>
                 <SelectItem value="offer">Teklif</SelectItem>
-                <SelectItem value="won">Kazanıldı</SelectItem>
-                <SelectItem value="lost">Kaybedildi</SelectItem>
+                <SelectItem value="won">Aktif Kiracı</SelectItem>
+                <SelectItem value="lost">Ev Sahibi</SelectItem>
               </SelectContent>
             </Select>
           </div>

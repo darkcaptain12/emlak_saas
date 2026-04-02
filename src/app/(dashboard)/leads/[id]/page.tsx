@@ -17,8 +17,8 @@ const STATUS_MAP: Record<string, { label: string; className: string }> = {
   contacted: { label: 'İletişimde', className: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' },
   viewing:   { label: 'Geziliyor',  className: 'bg-orange-500/20 text-orange-400 border-orange-500/30' },
   offer:     { label: 'Teklif',     className: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-  won:       { label: 'Kazanıldı',  className: 'bg-green-500/20 text-green-400 border-green-500/30' },
-  lost:      { label: 'Kaybedildi', className: 'bg-red-500/20 text-red-400 border-red-500/30' },
+  won:       { label: 'Aktif Kiracı',  className: 'bg-green-500/20 text-green-400 border-green-500/30' },
+  lost:      { label: 'Ev Sahibi', className: 'bg-red-500/20 text-red-400 border-red-500/30' },
 }
 
 const SOURCE_MAP: Record<string, string> = {
