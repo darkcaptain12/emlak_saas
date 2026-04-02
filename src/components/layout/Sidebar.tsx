@@ -23,7 +23,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/properties', label: 'İlanlar', icon: Building2 },
   { href: '/clients', label: 'Müşteriler', icon: Users },
-  { href: '/leads', label: 'Lead Takip', icon: TrendingUp },
+  { href: '/leads', label: 'Müşteri Takip', icon: TrendingUp },
   { href: '/settings', label: 'Ayarlar', icon: Settings },
 ]
 

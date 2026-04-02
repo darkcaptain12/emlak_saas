@@ -18,7 +18,7 @@ export default async function NewLeadPage({
 
   return (
     <div>
-      <PageHeader title="Yeni Lead" description="Müşteri ilgisini kaydedin" />
+      <PageHeader title="Yeni Müşteri" description="Müşteri ilgisini kaydedin" />
       <LeadForm
         clients={(clients as Client[]) || []}
         properties={(properties as Property[]) || []}

@@ -110,7 +110,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-white font-semibold">Leadler ({leads?.length || 0})</h2>
             <Link href={`/leads/new?client_id=${c.id}`} className={cn(buttonVariants({ size: 'sm' }), 'bg-blue-600 hover:bg-blue-700')}>
-              Yeni Lead
+              Yeni Müşteri
             </Link>
           </div>
           {!leads?.length ? (

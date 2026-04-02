@@ -15,21 +15,20 @@ export default async function LeadsPage() {
   return (
     <div>
       <PageHeader
-        title="Lead Takip"
-        description={`${leads?.length || 0} aktif lead`}
-        action={{ label: 'Yeni Lead', href: '/leads/new' }}
+        title="Müşteri Takip"
+        description={`${leads?.length || 0} aktif müşteri`}
+        action={{ label: 'Yeni Müşteri', href: '/leads/new' }}
       />
 
       {!leads?.length ? (
         <EmptyState
-          title="Henüz lead yok"
-          description="Müşteri ilgilerini takip etmek için lead oluşturun."
-          action={{ label: 'Lead Oluştur', href: '/leads/new' }}
+          title="Henüz müşteri yok"
+          description="Müşteri ilgilerini takip etmek için müşteri oluşturun."
+          action={{ label: 'Müşteri Oluştur', href: '/leads/new' }}
           icon={<TrendingUp className="w-12 h-12" />}
         />
       ) : (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <LeadKanban leads={leads as any} />
+        <LeadKanban leads={leads} />
       )}
     </div>
   )

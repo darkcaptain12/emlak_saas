@@ -186,18 +186,18 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         </div>
       )}
 
-      {/* Lead Takip - Satılık Mülkler */}
+      {/* Müşteri Takip - Satılık Mülkler */}
       {p.listing_type === 'sale' && (
         <div className="mt-8 pt-8 border-t border-slate-800">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-slate-400" />
-              <h2 className="text-white font-semibold">Teklifler & Lead Takip</h2>
+              <h2 className="text-white font-semibold">Teklifler & Müşteri Takip</h2>
             </div>
           </div>
           <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center">
-            <p className="text-slate-400 text-sm">Bu mülk için henüz teklif veya lead yok.</p>
-            <p className="text-slate-500 text-xs mt-2">Lead Takip sayfasından müşteri ekleyerek bu mülkü takip edebilirsiniz.</p>
+            <p className="text-slate-400 text-sm">Bu mülk için henüz teklif veya müşteri yok.</p>
+            <p className="text-slate-500 text-xs mt-2">Müşteri Takip sayfasından müşteri ekleyerek bu mülkü takip edebilirsiniz.</p>
           </div>
         </div>
       )}
