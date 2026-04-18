@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --color-zen-cream: #faf8f5;
+  --color-zen-stone: #8b7355;
+  --color-zen-dark: #1a1a1a;
+  --color-zen-muted: #6b6b6b;
+  --color-zen-border: #e8e4de;
+  --color-zen-accent: #2d5a27;
+  --color-zen-accent-light: #4a8a42;
+}
+
+body {
+  background-color: var(--color-zen-cream);
+  color: var(--color-zen-dark);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+}
